@@ -38,7 +38,15 @@ namespace PayrollSummarizer
                     bySSN.Add(currentSSN);
                 }
                 currentSSN.Add(record);
-                bySSNTotal.Add(record);
+            }
+            foreach(var record in bySSN)
+            {
+                // We can't just add the records to each other, because the total
+                // hours is total of rounded hours for each employee (not total hours rounded).
+                bySSNTotal.HourlyPayHours += Math.Round(record.TotalHours);
+                bySSNTotal.HourlyPay += record.GrossPay;
+                bySSNTotal.StateTax += record.StateTax;
+                bySSNTotal.StateTaxAdditional += record.StateTaxAdditional;
             }
             grdBySSN.Rows.Clear();
             foreach (var record in bySSN)
@@ -130,7 +138,7 @@ namespace PayrollSummarizer
         public decimal Sickhourlypay { get; set; }
         public decimal SickhourlypayHours { get; set; }
         public decimal Bonus { get; set; }
-        public decimal PaymentTotal { get; set; }
+        //public decimal PaymentTotal { get; set; }
         public decimal OregonWCEE { get; set; }
         public decimal Draw { get; set; }
         public decimal FederalTax { get; set; }
@@ -171,7 +179,7 @@ namespace PayrollSummarizer
             this.Sickhourlypay += addend.Sickhourlypay;
             this.SickhourlypayHours += addend.SickhourlypayHours;
             this.Bonus += addend.Bonus;
-            this.PaymentTotal += addend.PaymentTotal;
+            //this.PaymentTotal += addend.PaymentTotal;
             this.OregonWCEE += addend.OregonWCEE;
             this.Draw += addend.Draw;
             this.FederalTax += addend.FederalTax;
