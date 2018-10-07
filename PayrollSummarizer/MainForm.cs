@@ -75,6 +75,11 @@ namespace PayrollSummarizer
                 grdByDate.Rows.Add(record.CreatedDate.ToShortDateString(), record.AllSITW.ToString("F2"));
             }
             grdByDate.Rows.Add("Total", byDateTotal.AllSITW.ToString("F2"));
+
+            txtOtterData.Text = "Otter Data:" + Environment.NewLine +
+                "Subject Wages (column B): " + bySSNTotal.GrossPay.ToString("F2") + Environment.NewLine +
+                "Subject Wages (columns C & D): Zero" + Environment.NewLine +
+                "WBF Hours Worked: " + bySSNTotal.TotalHours.ToString("F0");
         }
 
         private List<Paycheck> GetPaychecks()

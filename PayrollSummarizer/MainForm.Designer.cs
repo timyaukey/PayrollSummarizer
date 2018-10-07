@@ -39,6 +39,7 @@
             this.grdByDate = new System.Windows.Forms.DataGridView();
             this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AllSITW2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtOtterData = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.grdBySSN)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdByDate)).BeginInit();
             this.SuspendLayout();
@@ -73,7 +74,7 @@
             this.AllSITW});
             this.grdBySSN.Location = new System.Drawing.Point(12, 41);
             this.grdBySSN.Name = "grdBySSN";
-            this.grdBySSN.Size = new System.Drawing.Size(551, 578);
+            this.grdBySSN.Size = new System.Drawing.Size(567, 578);
             this.grdBySSN.TabIndex = 1;
             // 
             // SSN
@@ -113,9 +114,9 @@
             this.grdByDate.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Date,
             this.AllSITW2});
-            this.grdByDate.Location = new System.Drawing.Point(569, 41);
+            this.grdByDate.Location = new System.Drawing.Point(585, 41);
             this.grdByDate.Name = "grdByDate";
-            this.grdByDate.Size = new System.Drawing.Size(279, 578);
+            this.grdByDate.Size = new System.Drawing.Size(270, 578);
             this.grdByDate.TabIndex = 2;
             // 
             // Date
@@ -128,19 +129,32 @@
             this.AllSITW2.HeaderText = "AllSITW";
             this.AllSITW2.Name = "AllSITW2";
             // 
-            // Form1
+            // txtOtterData
+            // 
+            this.txtOtterData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtOtterData.Location = new System.Drawing.Point(861, 41);
+            this.txtOtterData.Multiline = true;
+            this.txtOtterData.Name = "txtOtterData";
+            this.txtOtterData.Size = new System.Drawing.Size(250, 578);
+            this.txtOtterData.TabIndex = 3;
+            this.txtOtterData.Text = "Otter Data:";
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(860, 631);
+            this.ClientSize = new System.Drawing.Size(1123, 631);
+            this.Controls.Add(this.txtOtterData);
             this.Controls.Add(this.grdByDate);
             this.Controls.Add(this.grdBySSN);
             this.Controls.Add(this.btnLoadCSV);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Payroll Summarizer";
             ((System.ComponentModel.ISupportInitialize)(this.grdBySSN)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdByDate)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -157,6 +171,7 @@
         private System.Windows.Forms.DataGridView grdByDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn Date;
         private System.Windows.Forms.DataGridViewTextBoxColumn AllSITW2;
+        private System.Windows.Forms.TextBox txtOtterData;
     }
 }
 
