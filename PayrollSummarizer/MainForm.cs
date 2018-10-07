@@ -28,6 +28,7 @@ namespace PayrollSummarizer
             List<Paycheck> bySSN = new List<Paycheck>();
             Paycheck bySSNTotal = new Paycheck();
             Paycheck currentSSN = null;
+            Dictionary<string, MonthSummary> monthSummaries = new Dictionary<string, MonthSummary>();
             foreach (var record in paychecks)
             {
                 if (currentSSN == null || currentSSN.SSN != record.SSN)
@@ -38,6 +39,22 @@ namespace PayrollSummarizer
                     bySSN.Add(currentSSN);
                 }
                 currentSSN.Add(record);
+                if (record.StartDate.Day <= 12 && record.EndDate.Day >= 12)
+                {
+                    MonthSummary monthSum;
+                    string key = record.StartDate.Month.ToString() + "/" + record.StartDate.Year.ToString();
+                    if (!monthSummaries.TryGetValue(key, out monthSum))
+                    {
+                        monthSum = new MonthSummary();
+                        monthSum.MonthYear = key;
+                        monthSum.SSN = new List<string>();
+                        monthSummaries.Add(key, monthSum);
+                    }
+                    if (!monthSum.SSN.Contains(record.SSN))
+                    {
+                        monthSum.SSN.Add(record.SSN);
+                    }
+                }
             }
             foreach(var record in bySSN)
             {
@@ -84,10 +101,17 @@ namespace PayrollSummarizer
             }
             grdByDate.Rows.Add("Total", byDateTotal.AllSITW.ToString("F2"));
 
+            string employeeCountByMonth = "";
+            foreach(var monthSum in monthSummaries)
+            {
+                employeeCountByMonth += Environment.NewLine + 
+                    monthSum.Value.MonthYear + ": " + monthSum.Value.SSN.Count + " employees";
+            }
             txtOtterData.Text = "Otter Data:" + Environment.NewLine +
                 "Subject Wages (column B): " + bySSNTotal.GrossPay.ToString("F2") + Environment.NewLine +
                 "Subject Wages (columns C & D): Zero" + Environment.NewLine +
-                "WBF Hours Worked: " + bySSNTotal.TotalHours.ToString("F0");
+                "WBF Hours Worked: " + bySSNTotal.TotalHours.ToString("F0") +
+                employeeCountByMonth;
         }
 
         private List<Paycheck> GetPaychecks()
@@ -194,5 +218,11 @@ namespace PayrollSummarizer
         {
             return this.Name + " " + this.SSN + " " + this.CreatedDate.ToShortDateString();
         }
+    }
+
+    public class MonthSummary
+    {
+        public string MonthYear;
+        public List<string> SSN;
     }
 }
