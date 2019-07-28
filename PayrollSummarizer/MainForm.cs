@@ -12,6 +12,10 @@ namespace PayrollSummarizer
 {
     public partial class MainForm : Form
     {
+        private StringBuilder EmployeeExport;
+        private StringBuilder PayrollExport;
+        private StringBuilder StatewideTransitExport;
+
         public MainForm()
         {
             InitializeComponent();
@@ -39,20 +43,23 @@ namespace PayrollSummarizer
                     bySSN.Add(currentSSN);
                 }
                 currentSSN.Add(record);
-                if (record.StartDate.Day <= 12 && record.EndDate.Day >= 12)
+                for(DateTime dateInPeriod = record.StartDate; dateInPeriod <= record.EndDate; dateInPeriod = dateInPeriod.AddDays(1.0d))
                 {
-                    MonthSummary monthSum;
-                    string key = record.StartDate.Month.ToString() + "/" + record.StartDate.Year.ToString();
-                    if (!monthSummaries.TryGetValue(key, out monthSum))
+                    if (dateInPeriod.Day == 12)
                     {
-                        monthSum = new MonthSummary();
-                        monthSum.MonthYear = key;
-                        monthSum.SSN = new List<string>();
-                        monthSummaries.Add(key, monthSum);
-                    }
-                    if (!monthSum.SSN.Contains(record.SSN))
-                    {
-                        monthSum.SSN.Add(record.SSN);
+                        MonthSummary monthSum;
+                        string key = dateInPeriod.Month.ToString() + "/" + dateInPeriod.Year.ToString();
+                        if (!monthSummaries.TryGetValue(key, out monthSum))
+                        {
+                            monthSum = new MonthSummary();
+                            monthSum.MonthYear = key;
+                            monthSum.SSN = new List<string>();
+                            monthSummaries.Add(key, monthSum);
+                        }
+                        if (!monthSum.SSN.Contains(record.SSN))
+                        {
+                            monthSum.SSN.Add(record.SSN);
+                        }
                     }
                 }
             }
@@ -66,6 +73,8 @@ namespace PayrollSummarizer
                 bySSNTotal.StateTaxAdditional += record.StateTaxAdditional;
             }
             grdBySSN.Rows.Clear();
+            EmployeeExport = new StringBuilder();
+            StatewideTransitExport = new StringBuilder();
             foreach (var record in bySSN)
             {
                 grdBySSN.Rows.Add(record.SSN2,
@@ -73,6 +82,34 @@ namespace PayrollSummarizer
                     Math.Round(record.TotalHours).ToString(),
                     record.GrossPay.ToString("F2"),
                     record.AllSITW.ToString("F0"));
+                string[] nameParts = record.Name.Split(' ');
+                string firstName;
+                string lastName;
+                string middleInitial;
+                if (nameParts.Length == 3 && nameParts[1].Length <= 1)
+                {
+                    firstName = nameParts[0];
+                    middleInitial = nameParts[1];
+                    lastName = nameParts[2];
+                }
+                else
+                {
+                    MessageBox.Show("Could not parse name " + record.Name);
+                    firstName = nameParts[0];
+                    middleInitial = "";
+                    lastName = nameParts[1] + " " + nameParts[2];
+                }
+                EmployeeExport.AppendLine(
+                    string.Format("\"{0}\",\"{1}\",\"{2}\",\"{3}\",{4},{5},{6}",
+                        record.SSN2, lastName, firstName, middleInitial,
+                        Math.Round(record.TotalHours), record.GrossPay.ToString("F2"),
+                        record.AllSITW.ToString("F0"))
+                    );
+                StatewideTransitExport.AppendLine(
+                    string.Format("\"{0}\",\"{1}\",\"{2}\",{3},{4}",
+                        record.SSN2, firstName[0], lastName, record.GrossPay.ToString("F2"),
+                        (record.GrossPay*0.001M).ToString("F2"))
+                    );
             }
             grdBySSN.Rows.Add("Total", "", 
                 Math.Round(bySSNTotal.TotalHours).ToString(), 
@@ -95,9 +132,12 @@ namespace PayrollSummarizer
                 byDateTotal.Add(record);
             }
             grdByDate.Rows.Clear();
+            PayrollExport = new StringBuilder();
             foreach (var record in byDate)
             {
                 grdByDate.Rows.Add(record.CreatedDate.ToShortDateString(), record.AllSITW.ToString("F2"));
+                PayrollExport.AppendLine(string.Format("\"{0}\",{1}", 
+                    record.CreatedDate.ToShortDateString(), record.AllSITW.ToString("F2")));
             }
             grdByDate.Rows.Add("Total", byDateTotal.AllSITW.ToString("F2"));
 
@@ -112,6 +152,7 @@ namespace PayrollSummarizer
                 "Subject Wages (columns C & D): Zero" + Environment.NewLine +
                 "WBF Hours Worked: " + bySSNTotal.TotalHours.ToString("F0") +
                 employeeCountByMonth;
+            btnWriteOPRSFiles.Enabled = true;
         }
 
         private List<Paycheck> GetPaychecks()
@@ -143,6 +184,22 @@ namespace PayrollSummarizer
                     }
                 }
             }
+        }
+
+        private void btnWriteOPRSFiles_Click(object sender, EventArgs e)
+        {
+            WriteFile(EmployeeExport, "OPRS_EmployeeTotals.txt");
+            WriteFile(PayrollExport, "OPRS_PayrollTotals.txt");
+            WriteFile(StatewideTransitExport, "StatewideTransit.txt");
+        }
+
+        private void WriteFile(StringBuilder content, string rootFileName)
+        {
+            string fullFileName = System.IO.Path.Combine(
+                System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location),
+                rootFileName);
+            System.IO.File.WriteAllText(fullFileName, content.ToString(), Encoding.ASCII);
+            MessageBox.Show("Wrote " + fullFileName);
         }
     }
 

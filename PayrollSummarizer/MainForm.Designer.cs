@@ -40,6 +40,7 @@
             this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AllSITW2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtOtterData = new System.Windows.Forms.TextBox();
+            this.btnWriteOPRSFiles = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.grdBySSN)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdByDate)).BeginInit();
             this.SuspendLayout();
@@ -54,9 +55,9 @@
             // 
             this.btnLoadCSV.Location = new System.Drawing.Point(12, 12);
             this.btnLoadCSV.Name = "btnLoadCSV";
-            this.btnLoadCSV.Size = new System.Drawing.Size(138, 23);
+            this.btnLoadCSV.Size = new System.Drawing.Size(268, 23);
             this.btnLoadCSV.TabIndex = 0;
-            this.btnLoadCSV.Text = "Load CSV File";
+            this.btnLoadCSV.Text = "Load ezPaycheck Payroll Export CSV File";
             this.btnLoadCSV.UseVisualStyleBackColor = true;
             this.btnLoadCSV.Click += new System.EventHandler(this.btnLoadCSV_Click);
             // 
@@ -74,7 +75,7 @@
             this.AllSITW});
             this.grdBySSN.Location = new System.Drawing.Point(12, 41);
             this.grdBySSN.Name = "grdBySSN";
-            this.grdBySSN.Size = new System.Drawing.Size(567, 578);
+            this.grdBySSN.Size = new System.Drawing.Size(567, 402);
             this.grdBySSN.TabIndex = 1;
             // 
             // SSN
@@ -116,7 +117,7 @@
             this.AllSITW2});
             this.grdByDate.Location = new System.Drawing.Point(585, 41);
             this.grdByDate.Name = "grdByDate";
-            this.grdByDate.Size = new System.Drawing.Size(270, 578);
+            this.grdByDate.Size = new System.Drawing.Size(270, 402);
             this.grdByDate.TabIndex = 2;
             // 
             // Date
@@ -136,15 +137,28 @@
             this.txtOtterData.Location = new System.Drawing.Point(861, 41);
             this.txtOtterData.Multiline = true;
             this.txtOtterData.Name = "txtOtterData";
-            this.txtOtterData.Size = new System.Drawing.Size(250, 578);
+            this.txtOtterData.Size = new System.Drawing.Size(250, 402);
             this.txtOtterData.TabIndex = 3;
             this.txtOtterData.Text = "Otter Data:";
+            // 
+            // btnWriteOPRSFiles
+            // 
+            this.btnWriteOPRSFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnWriteOPRSFiles.Enabled = false;
+            this.btnWriteOPRSFiles.Location = new System.Drawing.Point(12, 449);
+            this.btnWriteOPRSFiles.Name = "btnWriteOPRSFiles";
+            this.btnWriteOPRSFiles.Size = new System.Drawing.Size(146, 23);
+            this.btnWriteOPRSFiles.TabIndex = 4;
+            this.btnWriteOPRSFiles.Text = "Write OPRS Files";
+            this.btnWriteOPRSFiles.UseVisualStyleBackColor = true;
+            this.btnWriteOPRSFiles.Click += new System.EventHandler(this.btnWriteOPRSFiles_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1123, 631);
+            this.ClientSize = new System.Drawing.Size(1123, 484);
+            this.Controls.Add(this.btnWriteOPRSFiles);
             this.Controls.Add(this.txtOtterData);
             this.Controls.Add(this.grdByDate);
             this.Controls.Add(this.grdBySSN);
@@ -172,6 +186,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Date;
         private System.Windows.Forms.DataGridViewTextBoxColumn AllSITW2;
         private System.Windows.Forms.TextBox txtOtterData;
+        private System.Windows.Forms.Button btnWriteOPRSFiles;
     }
 }
 
