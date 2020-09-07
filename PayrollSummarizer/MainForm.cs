@@ -75,6 +75,7 @@ namespace PayrollSummarizer
             grdBySSN.Rows.Clear();
             EmployeeExport = new StringBuilder();
             StatewideTransitExport = new StringBuilder();
+            StatewideTransitExport.AppendLine("SSN,FirstInitial,LastName,GrossWages,TaxAmount");
             foreach (var record in bySSN)
             {
                 grdBySSN.Rows.Add(record.SSN2,
